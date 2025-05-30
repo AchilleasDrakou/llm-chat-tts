@@ -1,0 +1,276 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+
+    /* Chat-specific colors */
+    --chat-user: 221 83% 53%;
+    --chat-assistant: 142 76% 36%;
+    --chat-system: 245 58% 51%;
+    --chat-info: 199 89% 48%;
+    --chat-warning: 38 92% 50%;
+
+    /* Audio visualization colors */
+    --audio-wave: 221 83% 53%;
+    --audio-wave-active: 142 76% 36%;
+    --audio-control: 245 58% 51%;
+
+    /* Code syntax highlighting */
+    --tw-prose-body: #374151;
+    --tw-prose-headings: #111827;
+    --tw-prose-lead: #4b5563;
+    --tw-prose-links: #111827;
+    --tw-prose-bold: #111827;
+    --tw-prose-counters: #6b7280;
+    --tw-prose-bullets: #d1d5db;
+    --tw-prose-hr: #e5e7eb;
+    --tw-prose-quotes: #111827;
+    --tw-prose-quote-borders: #e5e7eb;
+    --tw-prose-captions: #6b7280;
+    --tw-prose-code: #111827;
+    --tw-prose-code-bg: #f3f4f6;
+    --tw-prose-pre-code: #e5e7eb;
+    --tw-prose-pre-bg: #1f2937;
+    --tw-prose-th-borders: #d1d5db;
+    --tw-prose-td-borders: #e5e7eb;
+  }
+
+  .dark {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+
+    /* Chat-specific colors - adjusted for dark mode */
+    --chat-user: 213 94% 68%;
+    --chat-assistant: 142 71% 45%;
+    --chat-system: 245 58% 61%;
+    --chat-info: 199 89% 58%;
+    --chat-warning: 38 92% 60%;
+
+    /* Audio visualization colors - adjusted for dark mode */
+    --audio-wave: 213 94% 68%;
+    --audio-wave-active: 142 71% 45%;
+    --audio-control: 245 58% 61%;
+
+    /* Code syntax highlighting for dark mode */
+    --tw-prose-body: #d1d5db;
+    --tw-prose-headings: #fff;
+    --tw-prose-lead: #9ca3af;
+    --tw-prose-links: #fff;
+    --tw-prose-bold: #fff;
+    --tw-prose-counters: #9ca3af;
+    --tw-prose-bullets: #4b5563;
+    --tw-prose-hr: #374151;
+    --tw-prose-quotes: #f3f4f6;
+    --tw-prose-quote-borders: #374151;
+    --tw-prose-captions: #9ca3af;
+    --tw-prose-code: #fff;
+    --tw-prose-code-bg: #1f2937;
+    --tw-prose-pre-code: #d1d5db;
+    --tw-prose-pre-bg: #111827;
+    --tw-prose-th-borders: #4b5563;
+    --tw-prose-td-borders: #374151;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  /* Smooth scrolling for chat interface */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Optimize scrolling performance */
+  .chat-scroll-area {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--muted)) transparent;
+  }
+  
+  .chat-scroll-area::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .chat-scroll-area::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .chat-scroll-area::-webkit-scrollbar-thumb {
+    background-color: hsl(var(--muted));
+    border-radius: 10px;
+  }
+  
+  /* Hide scrollbar in mobile view but keep functionality */
+  @media (max-width: 640px) {
+    .chat-scroll-area::-webkit-scrollbar {
+      width: 3px;
+    }
+  }
+}
+
+@layer components {
+  /* Chat message bubbles */
+  .chat-bubble {
+    @apply relative p-4 rounded-chat shadow-message transition-shadow duration-200 ease-in-out;
+  }
+  
+  .chat-bubble-user {
+    @apply bg-blue-50 dark:bg-blue-950 border-blue-100 dark:border-blue-900;
+  }
+  
+  .chat-bubble-assistant {
+    @apply bg-green-50 dark:bg-green-950 border-green-100 dark:border-green-900;
+  }
+  
+  .chat-bubble-system {
+    @apply bg-purple-50 dark:bg-purple-950 border-purple-100 dark:border-purple-900;
+  }
+  
+  .chat-bubble:hover {
+    @apply shadow-message-hover;
+  }
+  
+  /* Audio visualization elements */
+  .audio-wave {
+    @apply flex items-end space-x-0.5 h-6;
+  }
+  
+  .audio-wave-bar {
+    @apply w-1 bg-blue-500 dark:bg-blue-400 rounded-t transition-all duration-300;
+  }
+  
+  .audio-wave-bar.active {
+    @apply bg-green-500 dark:bg-green-400;
+  }
+  
+  /* Audio controls */
+  .audio-control-button {
+    @apply rounded-full p-2 transition-colors duration-200 hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary;
+  }
+  
+  /* Typing indicator animation */
+  .typing-indicator {
+    @apply inline-flex space-x-1 items-center;
+  }
+  
+  .typing-indicator-dot {
+    @apply w-1.5 h-1.5 rounded-full bg-muted-foreground;
+    animation: typing-animation 1.4s infinite ease-in-out both;
+  }
+  
+  .typing-indicator-dot:nth-child(1) {
+    animation-delay: -0.32s;
+  }
+  
+  .typing-indicator-dot:nth-child(2) {
+    animation-delay: -0.16s;
+  }
+  
+  @keyframes typing-animation {
+    0%, 80%, 100% { 
+      transform: scale(0.6);
+    }
+    40% { 
+      transform: scale(1);
+    }
+  }
+}
+
+/* Markdown content styling */
+.prose-chat {
+  @apply prose dark:prose-invert prose-headings:mt-4 prose-headings:mb-2 
+    prose-p:my-2 prose-pre:my-2 prose-ol:my-2 prose-ul:my-2 
+    prose-pre:bg-muted prose-pre:text-muted-foreground
+    prose-code:bg-muted prose-code:text-muted-foreground prose-code:rounded prose-code:px-1 prose-code:py-0.5
+    prose-a:text-blue-600 dark:prose-a:text-blue-400 prose-a:no-underline hover:prose-a:underline
+    max-w-none;
+}
+
+/* Code block styling */
+.prose-chat pre {
+  @apply rounded-md p-4 overflow-x-auto;
+}
+
+.prose-chat pre code {
+  @apply bg-transparent p-0 text-sm;
+}
+
+/* Ensure proper spacing for lists */
+.prose-chat ul, .prose-chat ol {
+  @apply pl-5;
+}
+
+/* Voice playback animation */
+.voice-wave {
+  @apply flex items-end justify-center h-6 space-x-0.5;
+}
+
+.voice-wave-bar {
+  @apply w-1 bg-audio-wave rounded-t;
+}
+
+.voice-wave-bar.playing {
+  @apply bg-audio-wave-active;
+  animation: audio-wave 0.8s ease-in-out infinite;
+}
+
+.voice-wave-bar:nth-child(2) {
+  animation-delay: -0.7s;
+}
+
+.voice-wave-bar:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+.voice-wave-bar:nth-child(4) {
+  animation-delay: -0.5s;
+}
+
+.voice-wave-bar:nth-child(5) {
+  animation-delay: -0.4s;
+}
