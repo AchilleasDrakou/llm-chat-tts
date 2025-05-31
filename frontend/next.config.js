@@ -35,7 +35,6 @@ const nextConfig = {
     ];
   },
   experimental: {
-    serverActions: true,
     serverComponentsExternalPackages: ['react-markdown'],
     optimizeCss: true,
     scrollRestoration: true,

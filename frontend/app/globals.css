@@ -251,11 +251,12 @@
 }
 
 .voice-wave-bar {
-  @apply w-1 bg-audio-wave rounded-t;
+  @apply w-1 rounded-t;
+  background-color: hsl(var(--audio-wave));
 }
 
 .voice-wave-bar.playing {
-  @apply bg-audio-wave-active;
+  background-color: hsl(var(--audio-wave-active));
   animation: audio-wave 0.8s ease-in-out infinite;
 }
 
@@ -273,4 +274,13 @@
 
 .voice-wave-bar:nth-child(5) {
   animation-delay: -0.4s;
+}
+
+@keyframes audio-wave {
+  0%, 100% {
+    height: 0.5rem;
+  }
+  50% {
+    height: 1.5rem;
+  }
 }

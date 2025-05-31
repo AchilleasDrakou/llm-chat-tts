@@ -15,8 +15,8 @@ openai>=1.3.0
 chatterbox-tts>=0.1.0
 torch>=2.0.0
 torchaudio>=2.0.0
-numpy~=1.26.2  # Updated to available version with flexible constraint
-librosa>=0.10.1
+numpy==1.26.0  # Exact version required by chatterbox-tts
+librosa==0.10.0  # Exact version required by chatterbox-tts
 soundfile>=0.12.1
 
 # Audio processing

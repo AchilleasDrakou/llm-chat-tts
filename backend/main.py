@@ -106,7 +106,7 @@ class ErrorResponse(BaseModel):
 # Global variables
 openai_client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 tts_model = None
-device = "cuda" if torch.cuda.is_available() else "cpu"
+device = os.getenv("TTS_DEVICE", "cpu")
 
 # Middleware for error handling
 class ErrorHandlerMiddleware(BaseHTTPMiddleware):
@@ -134,8 +134,33 @@ async def get_tts_model():
     if tts_model is None:
         logger.info(f"Initializing Chatterbox TTS model on {device}")
         try:
-            tts_model = ChatterboxTTS.from_pretrained(device=device)
-            logger.info("Chatterbox TTS model initialized successfully")
+            # For CPU device, we need to force all CUDA operations to map to CPU
+            if device == "cpu":
+                # Set environment to disable CUDA visibility
+                os.environ["CUDA_VISIBLE_DEVICES"] = ""
+                
+                # Monkey patch torch.cuda.is_available to return False
+                original_is_available = torch.cuda.is_available
+                torch.cuda.is_available = lambda: False
+                
+                # Patch torch.load to always use CPU mapping
+                original_torch_load = torch.load
+                def cpu_torch_load(*args, **kwargs):
+                    kwargs['map_location'] = 'cpu'
+                    return original_torch_load(*args, **kwargs)
+                torch.load = cpu_torch_load
+                
+                try:
+                    tts_model = ChatterboxTTS.from_pretrained(device=device)
+                    logger.info("Chatterbox TTS model initialized successfully on CPU")
+                finally:
+                    # Restore original functions
+                    torch.cuda.is_available = original_is_available
+                    torch.load = original_torch_load
+            else:
+                tts_model = ChatterboxTTS.from_pretrained(device=device)
+                logger.info("Chatterbox TTS model initialized successfully")
+                
         except Exception as e:
             logger.exception(f"Failed to initialize Chatterbox TTS model: {str(e)}")
             raise HTTPException(
