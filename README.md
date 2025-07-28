@@ -185,10 +185,7 @@ PRs & issues welcome!
 ---
 
 ## 📄 License
-MIT © 2025 Factory AI.  
-Chatterbox is licensed under MIT by Resemble AI.  
-OpenAI output is subject to the OpenAI policy.
-
+MIT © 2025 
 ---
 
 _Enjoy chatting with a talking AI assistant!_ 🚀
