@@ -1,0 +1,51 @@
+mode: comment
+branches:
+  include:
+    - main
+    - dev
+review:
+  lenses:
+    - correctness
+    - security
+    - tests
+    - maintainability
+  browser:
+    enabled: true
+    paths:
+      - frontend/**
+      - app/**
+      - src/components/**
+      - src/pages/**
+  inline_comments: high_confidence_only
+  summary_comment: true
+  check_run: true
+  auto_rerun_on_push: true
+risk:
+  critical_paths:
+    - auth/**
+    - payments/**
+    - billing/**
+    - infra/**
+    - migrations/**
+    - frontend/**
+    - app/**
+  high_risk_labels:
+    - security
+    - migration
+    - payments
+owners:
+  use_codeowners: true
+publishing:
+  separate_blockers_from_nits: true
+  max_inline_comments: 12
+  request_human_review_on:
+    - blocker
+    - high_security
+runtime:
+  session_key: "{owner}/{repo}#{pr}@{headSha}"
+  subagents:
+    explorer: true
+    correctness: true
+    security: true
+    tests: true
+    browser: true
