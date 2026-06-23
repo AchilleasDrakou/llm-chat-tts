@@ -1,0 +1,52 @@
+name: pr-review-agent
+
+on:
+  pull_request_target:
+    types: [opened, reopened, ready_for_review, synchronize]
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: write
+
+jobs:
+  trigger-codex-review:
+    if: ${{ !github.event.pull_request.draft }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Codex review for this PR head
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const marker = `<!-- pr-review-agent head:${pr.head.sha} -->`;
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              per_page: 100,
+            });
+            const exists = comments.some((comment) =>
+              comment.user?.login === 'github-actions[bot]' && comment.body?.includes(marker)
+            );
+            if (exists) {
+              core.info(`Already triggered for ${pr.head.sha}`);
+              return;
+            }
+            const body = [
+              marker,
+              '@codex review',
+              '',
+              'Follow `.github/pr-review-agent.md` and `.github/pr-review-agent.yml` for the review contract.',
+              'Focus on correctness, security, regressions, tests, maintainability, and cross-repo impact notes when contracts or shared surfaces change.',
+            ].join('
+');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body,
+            });
