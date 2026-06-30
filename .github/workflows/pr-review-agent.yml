@@ -42,8 +42,7 @@ jobs:
               '',
               'Follow `.github/pr-review-agent.md` and `.github/pr-review-agent.yml` for the review contract.',
               'Focus on correctness, security, regressions, tests, maintainability, and cross-repo impact notes when contracts or shared surfaces change.',
-            ].join('
-');
+            ].join('\n');
             await github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
